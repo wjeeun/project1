@@ -9,27 +9,73 @@
 // 유저가 이미 입력한 숫자를 또 입력하면, 알려준다. 기회를 깍지 않는다.
 
 
-let computerNum=0;
+let randomNum=0;
 let playButton=document.getElementById("play-button");
+let resetButton=document.getElementById("reset-button");
 let userInput=document.getElementById("user-input");
 let resultArea=document.getElementById("result-area");
+let chances=5;
+let gameOver=false;
+let chanceOutput=document.getElementById("chance");
 
 playButton.addEventListener("click",play);
+resetButton.addEventListener("click",reset);
+userInput.addEventListener("focus",function(){
+    userInput.value="";
+})
 
-function pickRandomNum(){
-    computerNum=Math.floor(Math.random()*100)+1;
-    console.log(`정답 : ${computerNum}`);
+
+function random(){
+    randomNum=Math.floor(Math.random()*100)+1;
+    console.log(`정답 : ${randomNum}`);
 }
 
-pickRandomNum();
+random();
+
 
 function play(){
-    let userValue=userInput.value; 
-    if(userValue<computerNum){
-        resultArea.textContent="Up!!";
-    } else if(userValue>computerNum){
+    let userValue=userInput.value;
+
+    if(userValue<1||userValue>100){
+        resultArea.textContent="1과 100 사이 숫자를 입력해주세요";
+        return;
+    }
+
+    chances--;
+    chanceOutput.textContent=`남은 기회 : ${chances}`;
+
+    if(userValue>randomNum){
         resultArea.textContent="Down!!";
-    } else{
+    }else if(userValue<randomNum){
+        resultArea.textContent="Up!!";
+    }else{
         resultArea.textContent="정답입니다!!";
     }
+
+    if(chances<1){
+        gameOver=true;
+    }
+    
+    if(gameOver==true){
+        playButton.disabled=true;       
+    }
 }
+
+function reset(){
+    //user input 창이 깨끗하게 정리
+    userInput.value="";
+    //새로운 번호 생성
+    random();
+
+    resultArea.textContent="결과가 나온다";
+
+    chances=5;
+    chanceOutput.textContent=`남은 기회 : ${chances}`;
+
+    gameOver=false;
+
+    playButton.disabled=false;       
+
+    
+}
+
