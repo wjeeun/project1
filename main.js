@@ -62,9 +62,8 @@ function play(){
 }
 
 function reset(){
-    //user input 창이 깨끗하게 정리
     userInput.value="";
-    //새로운 번호 생성
+ 
     random();
 
     resultArea.textContent="결과가 나온다";
